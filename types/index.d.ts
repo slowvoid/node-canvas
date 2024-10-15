@@ -129,7 +129,7 @@ export class Canvas {
 	/**
 	 * Release memory used by cairo
 	 */
-	releaser(): void
+	release(): void
 }
 
 export interface TextMetrics {
