@@ -125,6 +125,11 @@ export class Canvas {
 	toDataURL(mimeType: 'image/jpeg', config: JpegConfig, cb: (err: Error|null, result: string) => void): void
 	/** _Non-standard._ */
 	toDataURL(mimeType: 'image/jpeg', quality: number, cb: (err: Error|null, result: string) => void): void
+
+	/**
+	 * Release memory used by cairo
+	 */
+	releaser(): void
 }
 
 export interface TextMetrics {

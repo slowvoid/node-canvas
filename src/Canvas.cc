@@ -65,6 +65,7 @@ Canvas::Initialize(Nan::ADDON_REGISTER_FUNCTION_ARGS_TYPE target) {
   // Prototype
   Local<ObjectTemplate> proto = ctor->PrototypeTemplate();
   Nan::SetPrototypeMethod(ctor, "toBuffer", ToBuffer);
+  Nan::SetPrototypeMethod(ctor, "release", Release);
   Nan::SetPrototypeMethod(ctor, "streamPNGSync", StreamPNGSync);
   Nan::SetPrototypeMethod(ctor, "streamPDFSync", StreamPDFSync);
 #ifdef HAVE_JPEG
@@ -960,6 +961,14 @@ Canvas::createCairoContext() {
 Local<Value>
 Canvas::Error(cairo_status_t status) {
   return Exception::Error(Nan::New<String>(cairo_status_to_string(status)).ToLocalChecked());
+}
+
+NAN_METHOD(Canvas::Release) {
+  Canvas *canvas = Nan::ObjectWrap::Unwrap<Canvas>(info.This());
+
+  cairo_surface_finish(canvas->surface());
+  cairo_surface_flush(canvas->surface());
+  canvas->backend()->destroySurface();
 }
 
 #undef CHECK_RECEIVER
