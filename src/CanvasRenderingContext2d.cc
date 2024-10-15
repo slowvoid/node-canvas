@@ -1226,6 +1226,7 @@ NAN_METHOD(Context2d::DrawImage) {
     source_w = sw = img->width;
     source_h = sh = img->height;
     surface = img->surface();
+    _imageInstances.push_back(img);
 
   // Canvas
   } else if (Nan::New(Canvas::constructor)->HasInstance(obj)) {
@@ -3355,6 +3356,16 @@ NAN_METHOD(Context2d::Ellipse) {
       endAngle);
   }
   cairo_set_matrix(ctx, &save_matrix);
+}
+
+void Context2d::release() {
+  for(std::vector<Image*>::iterator it = _imageInstances.begin(); it != _imageInstances.end();) {
+    // Image* i = _imageInstances.at(it.base())
+    auto i = it.base();
+    delete i;
+    _imageInstances.erase(it);
+  }
+  // _imageInstances.erase(_imageInstances.begin(), _imageInstances.end());
 }
 
 #undef CHECK_RECEIVER

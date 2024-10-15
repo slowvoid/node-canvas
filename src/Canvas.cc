@@ -963,12 +963,24 @@ Canvas::Error(cairo_status_t status) {
   return Exception::Error(Nan::New<String>(cairo_status_to_string(status)).ToLocalChecked());
 }
 
-NAN_METHOD(Canvas::Release) {
+NAN_METHOD(Canvas::Release) {  
   Canvas *canvas = Nan::ObjectWrap::Unwrap<Canvas>(info.This());
+  canvas->releaseContext(info.This());
 
   cairo_surface_finish(canvas->surface());
   cairo_surface_flush(canvas->surface());
   canvas->backend()->destroySurface();
+}
+
+void Canvas::releaseContext(Local<Object> canvas) {
+  Local<Value> context;
+  context = Nan::Get(canvas, Nan::New<String>("context").ToLocalChecked()).ToLocalChecked();
+
+  if(!context->IsUndefined()) {
+    Context2d *context2d = ObjectWrap::Unwrap<Context2d>(Nan::To<Object>(context).ToLocalChecked());
+    context2d->resetState();
+    context2d->release();
+  }
 }
 
 #undef CHECK_RECEIVER

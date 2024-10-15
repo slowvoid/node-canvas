@@ -90,6 +90,7 @@ class Canvas: public Nan::ObjectWrap {
 
     Canvas(Backend* backend);
     void resurface(v8::Local<v8::Object> canvas);
+    void releaseContext(v8::Local<v8::Object> canvas);
 
   private:
     ~Canvas();

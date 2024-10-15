@@ -8,6 +8,7 @@
 #include "nan.h"
 #include <pango/pangocairo.h>
 #include <stack>
+#include "Image.h"
 
 /*
  * State struct.
@@ -206,6 +207,7 @@ class Context2d : public Nan::ObjectWrap {
     void setFontFromState();
     void resetState();
     inline PangoLayout *layout(){ return _layout; }
+    void release();
 
   private:
     ~Context2d();
@@ -222,4 +224,5 @@ class Context2d : public Nan::ObjectWrap {
     cairo_t *_context;
     cairo_path_t *_path;
     PangoLayout *_layout;
+    static std::vector<Image*> _imageInstances;
 };

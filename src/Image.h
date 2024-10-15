@@ -91,6 +91,7 @@ class Image: public Nan::ObjectWrap {
     void loaded();
     cairo_status_t load();
     Image();
+    ~Image();
 
     enum {
         DEFAULT
@@ -123,5 +124,4 @@ class Image: public Nan::ObjectWrap {
     int _svg_last_width;
     int _svg_last_height;
 #endif
-    ~Image();
 };
